@@ -25,23 +25,24 @@ headers = {
     'content-type': 'application/json'
 }
 
+#https://redlock.atlassian.net/wiki/spaces/RED/pages/2135327827/MDC+-+Licensing#EC2
 rql = {}
 rql['aws-ec2'] = "config from cloud.resource where cloud.type = 'aws' AND resource.status = Active AND api.name = 'aws-ec2-describe-instances' AND json.rule = state.code equals 16"
 rql['aws-rds'] = "config from cloud.resource where cloud.type = 'aws' AND resource.status = Active AND api.name = 'aws-rds-describe-db-instances'"
-rql['aws-nat'] = "config from cloud.resource where cloud.type = 'aws' AND resource.status = Active AND api.name = 'aws-vpc-nat-gateway'"
-rql['aws-lb'] = "config from cloud.resource where cloud.type = 'aws' AND resource.status = Active AND api.name = 'aws-elbv2-describe-load-balancers'"
+rql['aws-nat'] = "config from cloud.resource where cloud.type = 'aws' AND resource.status = Active AND api.name = 'aws-ec2-describe-internet-gateways'"
+rql['aws-lb'] = "config from cloud.resource where cloud.type = 'aws' AND resource.status = Active AND api.name = 'aws-elb-describe-load-balancers'"
 rql['aws-red'] = "config from cloud.resource where cloud.type = 'aws' AND resource.status = Active AND api.name = 'aws-redshift-describe-clusters'"
 
 rql["gcp-instances"] = "config from cloud.resource where cloud.type = 'gcp' AND resource.status = Active AND api.name = 'gcloud-compute-instances-list' AND json.rule = status equals RUNNING"
-rql["gcp-router"] = "config from cloud.resource where cloud.type = 'gcp' AND resource.status = Active AND api.name = 'gcloud-compute-router'"
+rql["gcp-router"] = "config from cloud.resource where cloud.type = 'gcp' AND resource.status = Active AND api.name = 'gcloud-compute-internal-lb-backend-service'"
 rql["gcp-nat"] = "config from cloud.resource where cloud.type = 'gcp' AND resource.status = Active AND api.name = 'gcloud-compute-nat'"
-rql["gcp-sql"] = "config from cloud.resource where cloud.type = 'gcp' AND resource.status = Active AND api.name = 'gcloud-sql-instances-list'"
+rql["gcp-sql"] = "config from cloud.resource where cloud.type = 'gcp' AND resource.status = Active AND api.name = 'gcloud-sql-instances-list' AND json.rule = state equals RUNNABLE" 
 
-rql["azure-server"] = "config from cloud.resource where cloud.type = 'azure' AND resource.status = Active AND api.name = 'azure-sql-server-list' "
+rql["azure-server"] = "config from cloud.resource where cloud.type = 'azure' AND resource.status = Active AND api.name = 'azure-vm-list' AND json.rule = powerState equals PowerState/running " 
 rql["azure-database"] = "config from cloud.resource where cloud.type = 'azure' AND resource.status = Active AND api.name = 'azure-sql-db-list' "
 rql["azure-instance"] = "config from cloud.resource where cloud.type = 'azure' AND resource.status = Active AND api.name = 'azure-sql-managed-instance' "
 rql["azure-lb"] = "config from cloud.resource where cloud.type = 'azure' AND resource.status = Active AND api.name = 'azure-network-lb-list'"
-rql["azure-post"] = "config from cloud.resource where cloud.type = 'azure' AND resource.status = Active AND api.name = 'azure-postgresql-server' "
+rql["azure-post"] = "config from cloud.resource where cloud.type = 'azure' AND resource.status = Active AND api.name = 'azure-postgresql-server' AND json.rule = properties.userVisibleState equals ready " 
 
 
 def call_api(type, t):
